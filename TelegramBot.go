@@ -56,6 +56,8 @@ func main() {
 			reply = "Привет. Я телеграм-бот"
 		case "hello":
 			reply = "What?"
+		case "Привет":
+			reply = "What? Не понимать"
 		}
 
 		// создаем ответное сообщение
