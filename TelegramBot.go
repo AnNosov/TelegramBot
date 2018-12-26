@@ -6,6 +6,7 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 	"log"
 	"os"
+	"time"
 )
 
 type Config struct {
@@ -41,23 +42,31 @@ func main() {
 	// вычитываем их и обрабатываем
 	for update := range updates {
 		// универсальный ответ на любое сообщение
-		reply := "Не знаю что сказать"
+		var reply string
 		if update.Message == nil {
 			continue
 		}
 
-		// логируем от кого какое сообщение пришло
+		// логируем сообщения
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
 		// свитч на обработку комманд
 		// комманда - сообщение, начинающееся с "/"
-		switch update.Message.Command() {
+		switch update.Message.Text {
 		case "start":
-			reply = "Привет. Я телеграм-бот"
-		case "hello":
 			reply = "What?"
-		case "Привет":
-			reply = "What? Не понимать"
+		case "hello":
+			reply = "Привет. Я телеграм-бот"
+		case "time":
+			t := time.Now()
+			reply = t.Format(time.RFC822)
+		case "namebot":
+			reply = bot.Self.UserName
+		case "myname":
+			reply = update.Message.From.UserName
+		default:
+			reply = "I don't know that command"
+
 		}
 
 		// создаем ответное сообщение
