@@ -49,7 +49,7 @@ func main() {
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text) //логирование
 
 		// комманда - сообщение, начинающееся с "/"
-		switch update.Message.Command() {
+		switch update.Message.Text {
 		case "/start":
 			reply = "What?"
 		case "Привет":
