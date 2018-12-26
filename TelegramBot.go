@@ -14,7 +14,7 @@ type Config struct {
 }
 
 func main() {
-	file, _ := os.Open("config.json")
+	file, _ := os.Open("config.json") // зашил токен в json
 	decoder := json.NewDecoder(file)
 	configuration := Config{}
 	err := decoder.Decode(&configuration)
@@ -41,32 +41,30 @@ func main() {
 	// в канал updates прилетают структуры типа Update
 	// вычитываем их и обрабатываем
 	for update := range updates {
-		// универсальный ответ на любое сообщение
 		var reply string
 		if update.Message == nil {
 			continue
 		}
 
-		// логируем сообщения
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text) //логирование
 
-		// свитч на обработку комманд
 		// комманда - сообщение, начинающееся с "/"
-		switch update.Message.Text {
-		case "start":
+		switch update.Message.Command() {
+		case "/start":
 			reply = "What?"
-		case "hello":
+		case "Привет":
 			reply = "Привет. Я телеграм-бот"
-		case "time":
+		case "Сколько времени?":
 			t := time.Now()
 			reply = t.Format(time.RFC822)
-		case "namebot":
+		case "Назови себя":
 			reply = bot.Self.UserName
-		case "myname":
+		case "Как меня зовут?":
 			reply = update.Message.From.UserName
-		default:
-			reply = "I don't know that command"
-
+		case "Что ты такое?":
+			reply = update.Message.From.UserName
+			//default:
+			//	reply = "I don't know that command" // на всякий
 		}
 
 		// создаем ответное сообщение
