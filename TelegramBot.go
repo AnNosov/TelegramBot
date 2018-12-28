@@ -42,14 +42,15 @@ func main() {
 	// вычитываем их и обрабатываем
 	for update := range updates {
 		var reply string
+		var a string
+		var b string
 		if update.Message == nil {
 			continue
 		}
 
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text) //логирование
 
-		// комманда - сообщение, начинающееся с "/"
-		switch update.Message.Text {
+		switch update.Message.Text { // обработка текста Command для команд :))
 		case "/start":
 			reply = "What?"
 		case "Привет":
@@ -61,8 +62,10 @@ func main() {
 			reply = bot.Self.UserName
 		case "Как меня зовут?":
 			reply = update.Message.From.UserName
-		case "Что ты такое?":
-			reply = update.Message.From.UserName
+		case "Проверка":
+			a = update.Message.From.FirstName
+			b = update.Message.From.LastName
+			reply = a + " " + b
 			//default:
 			//	reply = "I don't know that command" // на всякий
 		}
